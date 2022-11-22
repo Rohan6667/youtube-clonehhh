@@ -4,25 +4,20 @@ import ReactPlayer from 'react-player';
 import { Typography, Box, Stack } from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
 
-import { Videos } from './';
+import { Videos, Loader } from './';
 import { fetchFromAPI } from "../utils/fetchFromAPI";
 
 const VideoDetail = () => {
   const [videoDetail, setVideoDetail] = useState(null);
   const { id } = useParams();
-  
-  console.log("id");
-  console.log(id);
-  console.log("id");
 
   useEffect(() => {
     fetchFromAPI(`videos?part=snippet,statistics&id=${id}`)
       .then((data) => setVideoDetail(data.items[0]));
-  }, [id, setVideoDetail]);
+  }, [id]);
 
-  console.log("videoDetail");
-  console.log(videoDetail);
-  console.log("videoDetail");
+  if (!videoDetail?.snippet) return <Loader />;
+  
   const { snippet: { title, channelId, channelTitle }, statistics: { viewCount, likeCount } } = videoDetail;
 
   return (
